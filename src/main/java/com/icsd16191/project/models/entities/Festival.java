@@ -27,4 +27,9 @@ public class Festival {
     @JoinColumn(name = "festival_organizer")
     private User organizer;
 
+    @ManyToMany(mappedBy = "staffFestivals")
+    private List<User> staff = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private FestivalState festivalState;
 }

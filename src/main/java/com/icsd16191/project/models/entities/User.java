@@ -31,4 +31,8 @@ public class User  {
 
     @OneToMany(mappedBy = "organizer")
     private List<Festival> festivals = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable
+    private List<Festival> staffFestivals = new ArrayList<>();
 }

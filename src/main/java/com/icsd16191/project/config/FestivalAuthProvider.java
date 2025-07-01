@@ -1,5 +1,7 @@
 package com.icsd16191.project.config;
 
+import com.icsd16191.project.mappers.UserMapper;
+import com.icsd16191.project.models.dtos.UserDto;
 import com.icsd16191.project.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -37,9 +39,6 @@ public class FestivalAuthProvider implements AuthenticationProvider {
         } else {
             throw new RuntimeException("no such user");
         }
-        return null;
-    }
-    public Map<String,Object> login(){
         return null;
     }
 

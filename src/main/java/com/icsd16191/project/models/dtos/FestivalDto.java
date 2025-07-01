@@ -1,0 +1,27 @@
+package com.icsd16191.project.models.dtos;
+
+import com.icsd16191.project.models.entities.FestivalState;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class FestivalDto {
+    private Long id;
+    private String name;
+    private String description;
+    private List<String> dates = new ArrayList<>();
+
+    private String organizer;
+
+    private List<String> staff = new ArrayList<>();
+
+    private String festivalState;
+}

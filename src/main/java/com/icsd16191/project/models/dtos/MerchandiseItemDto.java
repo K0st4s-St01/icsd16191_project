@@ -1,26 +1,21 @@
-package com.icsd16191.project.models.entities;
+package com.icsd16191.project.models.dtos;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MerchandiseItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class MerchandiseItemDto {
     private Long id;
     private String name;
     private String description;
     private String ItemType;
     private Float price;
 
-    @ManyToOne
-    @JoinColumn
-    private Performance performance;
+    private Long performance;
 
 
 }

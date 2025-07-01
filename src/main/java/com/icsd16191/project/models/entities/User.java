@@ -18,6 +18,7 @@ import java.util.List;
 public class User  {
     @Id
     private String username;
+    @NonNull
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -27,7 +28,7 @@ public class User  {
     private List<Performance> performances = new ArrayList<>();
 
     @OneToOne(mappedBy = "staff")
-    private Performance performance;
+    private Performance staffperformance;
 
     @OneToMany(mappedBy = "organizer")
     private List<Festival> festivals = new ArrayList<>();

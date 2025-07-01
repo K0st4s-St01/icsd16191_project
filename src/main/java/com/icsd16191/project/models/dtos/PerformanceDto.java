@@ -23,16 +23,13 @@ public class PerformanceDto {
     private String technicalRequirements;
     private String setList;
 
-    private List<MerchandiseItemDto> merchandiseItems;
+    private List<Long> merchandiseItems;
 
     private List<String> preferredRehearsalTimes = new ArrayList<>();
 
     private List<String> preferredPerformanceTimeSlots = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    private PerformanceState performanceState;
+    private String performanceState;
 
-    @OneToOne
-    @JoinColumn
-    private UserDto staff;
+    private String staff;
 }

@@ -21,7 +21,7 @@ public class UserDto {
 
     private List<Long> performances = new ArrayList<>();
 
-    private Long performance;
+    private Long staffPerformance;
 
     private List<Long> festivals = new ArrayList<>();
 

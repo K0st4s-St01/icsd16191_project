@@ -1,8 +1,8 @@
 package com.icsd16191.project.services;
 
-import com.icsd16191.project.mappers.PerfomanceMapper;
+import com.icsd16191.project.mappers.PerformanceMapper;
 import com.icsd16191.project.models.dtos.PerformanceDto;
-import com.icsd16191.project.models.dtos.UserDto;
+import com.icsd16191.project.models.dtos.PerformanceReviewDto;
 import com.icsd16191.project.models.entities.PerformanceState;
 import com.icsd16191.project.repositories.FestivalRepository;
 import com.icsd16191.project.repositories.MerchandiseRepository;
@@ -20,7 +20,7 @@ import java.util.Map;
 @Service
 @AllArgsConstructor
 public class PerformanceService {
-    private PerfomanceMapper perfomanceMapper;
+    private PerformanceMapper performanceMapper;
     private PerformanceRepository performanceRepository;
     private UserRepository userRepository;
     private MerchandiseRepository merchandiseRepository;
@@ -56,7 +56,7 @@ public class PerformanceService {
         if(dto.getBandMembers().isEmpty()){
             return Map.of("result","band member data missing");
         }
-        var entity = perfomanceMapper.toEntity(
+        var entity = performanceMapper.toEntity(
                 dto
                 ,userRepository.findAllById(dto.getBandMembers())
                 ,null
@@ -66,6 +66,7 @@ public class PerformanceService {
                 ,timeSlots
                 , PerformanceState.CREATED
                 ,festivalRepository.findById(dto.getFestival()).orElseThrow()
+                ,null
         );
 
         performanceRepository.save(entity);
@@ -107,7 +108,7 @@ public class PerformanceService {
                     throw new Exception("new name already exists");
                 }
             }
-            var entity = perfomanceMapper.toEntity(
+            var entity = performanceMapper.toEntity(
                     dto
                     , userRepository.findAllById(dto.getBandMembers())
                     , null
@@ -117,6 +118,7 @@ public class PerformanceService {
                     , timeSlots
                     , PerformanceState.CREATED
                     ,festivalRepository.findById(dto.getId()).orElseThrow()
+                    ,null
             );
 
             performanceRepository.save(entity);
@@ -184,5 +186,9 @@ public class PerformanceService {
         }else{
             throw new Exception(staffMember+" not staff member");
         }
+    }
+    public Map<String,Object> performanceReview(String staff , PerformanceReviewDto dto,Long performance){
+        //not implemented yet
+        return null;
     }
 }

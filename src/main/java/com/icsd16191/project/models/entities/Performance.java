@@ -31,6 +31,7 @@ public class Performance {
     private List<User> bandMembers = new ArrayList<>();
 
     private String technicalRequirements;
+    @Column(columnDefinition = "TEXT")
     private String setList;
 
     @OneToMany(mappedBy = "performance")
@@ -52,4 +53,8 @@ public class Performance {
     @ManyToOne
     @JoinColumn
     private Festival festival;
+
+    @OneToOne
+    @JoinColumn
+    private PerformanceReview review;
 }

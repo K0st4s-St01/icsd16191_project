@@ -35,4 +35,6 @@ public class PerformanceDto {
     private String staff;
 
     private Long festival;
+
+    private Long perfomanceReview;
 }

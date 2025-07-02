@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class PerfomanceMapper {
+public class PerformanceMapper {
     public Performance toEntity(PerformanceDto dto
             , List<User> bandMembers
             , User staff
@@ -18,6 +18,7 @@ public class PerfomanceMapper {
             , List<Date> preferredRehearsalTimes
             , PerformanceState state
             , Festival festival
+            ,PerformanceReview review
                                 ){
         return Performance
                 .builder()
@@ -36,6 +37,7 @@ public class PerfomanceMapper {
                 .setList(dto.getSetList())
                 .performanceState(state)
                 .festival(festival)
+                .performanceReview(review)
                 .build();
     }
     public PerformanceDto toDto(
@@ -46,6 +48,7 @@ public class PerfomanceMapper {
             ,List<Long> merchandise
             ,List<String> rehearsalDates
             ,List<String> timeSlots
+            ,Long performanceReview
     ){
         return PerformanceDto
                 .builder()
@@ -63,6 +66,7 @@ public class PerfomanceMapper {
                 .preferredPerformanceTimeSlots(timeSlots)
                 .preferredRehearsalTimes(rehearsalDates)
                 .festival(entity.getFestival()!=null ? entity.getFestival().getId() : null)
+                .perfomanceReview(performanceReview)
                 .build();
     }
 }

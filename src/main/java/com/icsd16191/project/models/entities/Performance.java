@@ -48,4 +48,8 @@ public class Performance {
     @OneToOne
     @JoinColumn
     private User staff;
+
+    @ManyToOne
+    @JoinColumn
+    private Festival festival;
 }

@@ -1,10 +1,7 @@
 package com.icsd16191.project.mappers;
 
 import com.icsd16191.project.models.dtos.PerformanceDto;
-import com.icsd16191.project.models.entities.MerchandiseItem;
-import com.icsd16191.project.models.entities.Performance;
-import com.icsd16191.project.models.entities.PerformanceState;
-import com.icsd16191.project.models.entities.User;
+import com.icsd16191.project.models.entities.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -17,10 +14,11 @@ public class PerfomanceMapper {
             , User staff
             , Date creationDate
             , List<MerchandiseItem> merchandiseItems
-            ,List<Date> preferredTimeSlots
-            ,List<Date> preferredRehearsalTimes
-            ,PerformanceState state
-    ){
+            , List<Date> preferredTimeSlots
+            , List<Date> preferredRehearsalTimes
+            , PerformanceState state
+            , Festival festival
+                                ){
         return Performance
                 .builder()
                 .name(dto.getName())
@@ -37,6 +35,7 @@ public class PerfomanceMapper {
                 .duration(dto.getDuration())
                 .setList(dto.getSetList())
                 .performanceState(state)
+                .festival(festival)
                 .build();
     }
     public PerformanceDto toDto(
@@ -63,6 +62,7 @@ public class PerfomanceMapper {
                 .technicalRequirements(entity.getTechnicalRequirements())
                 .preferredPerformanceTimeSlots(timeSlots)
                 .preferredRehearsalTimes(rehearsalDates)
+                .festival(entity.getFestival()!=null ? entity.getFestival().getId() : null)
                 .build();
     }
 }

@@ -33,4 +33,6 @@ public class PerformanceDto {
     private String performanceState;
 
     private String staff;
+
+    private Long festival;
 }

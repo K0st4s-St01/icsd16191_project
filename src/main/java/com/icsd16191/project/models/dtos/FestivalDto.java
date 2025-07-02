@@ -25,4 +25,6 @@ public class FestivalDto {
     private List<String> staff = new ArrayList<>();
 
     private String festivalState;
+
+    private List<Long> performances;
 }

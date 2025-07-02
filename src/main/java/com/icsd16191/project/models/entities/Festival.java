@@ -32,4 +32,7 @@ public class Festival {
 
     @Enumerated(EnumType.STRING)
     private FestivalState festivalState;
+
+    @OneToMany(mappedBy = "festival")
+    private List<Performance> performances = new ArrayList<>();
 }

@@ -9,7 +9,7 @@ public class FestivalDateFormatter {
     public static Date toDate(String date) throws ParseException {
         return simpleDateFormat.parse(date);
     }
-    public static String toString(Date date){
+    public static String turnToString(Date date){
         return simpleDateFormat.format(date);
     }
 }

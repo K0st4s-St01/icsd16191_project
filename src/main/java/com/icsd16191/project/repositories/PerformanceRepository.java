@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface PerformanceRepository extends JpaRepository<Performance,Long> {
     boolean existsByName(String name);
@@ -17,4 +19,6 @@ public interface PerformanceRepository extends JpaRepository<Performance,Long> {
     @Modifying
     @Query("update Performance p set p.performanceState = ?1 where p.id = ?2")
     void updatePerformanceStateById(PerformanceState performanceState, Long id);
+
+    List<Performance> findByNameOrGenreOrBandMembersAllIgnoreCase(String name, String genre, User bandMembers);
 }

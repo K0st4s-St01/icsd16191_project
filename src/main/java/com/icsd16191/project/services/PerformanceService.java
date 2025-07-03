@@ -11,10 +11,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class PerformanceService {
@@ -237,5 +236,70 @@ public class PerformanceService {
         return result;
     }
 
+    public Map<String,Object> performanceAcceptance(Long performanceId) throws Exception {
+        performanceRepository.updatePerformanceStateById(PerformanceState.APPROVED,performanceId);
+        return Map.of("result","performance accepted");
+    }
+    public Map<String,Object> performanceSearch(List<String> fields) throws Exception {
+        var dtos = new ArrayList<PerformanceDto>();
+        if (fields==null){
+            throw new Exception("fields are null");
+        }
+        if (fields.isEmpty()) {
+            for (var entity : performanceRepository.findAll()) {
+
+                dtos.add(performanceMapper.toDto(
+                                entity,
+                                entity.getPerformanceState(),
+                                entity.getBandMembers().stream().map(User::getUsername).collect(Collectors.toList()),
+                                entity.getStaff().getUsername(),
+                                entity.getMerchandiseItems().stream().map(MerchandiseItem::getId).collect(Collectors.toList()),
+                                entity.getPreferredRehearsalTimes().stream().map(FestivalDateFormatter::turnToString).collect(Collectors.toList()),
+                                entity.getPreferredPerformanceTimeSlots().stream().map(FestivalDateFormatter::turnToString).collect(Collectors.toList()),
+                                entity.getReview().getId()
+                        )
+                );
+                dtos.sort(Comparator.comparing(PerformanceDto::getGenre).thenComparing(PerformanceDto::getName));
+                return Map.of("result", "successful", "dtos", dtos);
+            }
+        } else {
+            for (var field : fields) {
+                for (var entity : performanceRepository.findByNameOrGenreOrBandMembersAllIgnoreCase(field, field, userRepository.findById(field).orElse(new User()))) {
+
+                    dtos.add(performanceMapper.toDto(
+                                    entity,
+                                    entity.getPerformanceState(),
+                                    entity.getBandMembers().stream().map(User::getUsername).collect(Collectors.toList()),
+                                    entity.getStaff().getUsername(),
+                                    entity.getMerchandiseItems().stream().map(MerchandiseItem::getId).collect(Collectors.toList()),
+                                    entity.getPreferredRehearsalTimes().stream().map(FestivalDateFormatter::turnToString).collect(Collectors.toList()),
+                                    entity.getPreferredPerformanceTimeSlots().stream().map(FestivalDateFormatter::turnToString).collect(Collectors.toList()),
+                                    entity.getReview().getId()
+                            )
+                    );
+                }
+            }
+            dtos.sort(Comparator.comparing(PerformanceDto::getGenre).thenComparing(PerformanceDto::getName));
+            return Map.of("result", "successful", "dtos", dtos);
+        }
+        throw new Exception("I dont know how you got here");
+    }
+    public Map<String,Object> performanceView(long performanceId){
+        var dtos = new ArrayList<PerformanceDto>();
+        var entity = performanceRepository.findById(performanceId).orElseThrow();
+
+            dtos.add(performanceMapper.toDto(
+                            entity,
+                            entity.getPerformanceState(),
+                            entity.getBandMembers().stream().map(User::getUsername).collect(Collectors.toList()),
+                            entity.getStaff().getUsername(),
+                            entity.getMerchandiseItems().stream().map(MerchandiseItem::getId).collect(Collectors.toList()),
+                            entity.getPreferredRehearsalTimes().stream().map(FestivalDateFormatter::turnToString).collect(Collectors.toList()),
+                            entity.getPreferredPerformanceTimeSlots().stream().map(FestivalDateFormatter::turnToString).collect(Collectors.toList()),
+                            entity.getReview().getId()
+                    )
+            );
+            return Map.of("result", "successful", "dtos", dtos);
+    }
 
 }

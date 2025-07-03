@@ -1,13 +1,11 @@
 package com.icsd16191.project.services;
 
 import com.icsd16191.project.mappers.PerformanceMapper;
+import com.icsd16191.project.mappers.PerformanceReviewMapper;
 import com.icsd16191.project.models.dtos.PerformanceDto;
 import com.icsd16191.project.models.dtos.PerformanceReviewDto;
-import com.icsd16191.project.models.entities.PerformanceState;
-import com.icsd16191.project.repositories.FestivalRepository;
-import com.icsd16191.project.repositories.MerchandiseRepository;
-import com.icsd16191.project.repositories.PerformanceRepository;
-import com.icsd16191.project.repositories.UserRepository;
+import com.icsd16191.project.models.entities.*;
+import com.icsd16191.project.repositories.*;
 import com.icsd16191.project.utils.FestivalDateFormatter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +23,8 @@ public class PerformanceService {
     private UserRepository userRepository;
     private MerchandiseRepository merchandiseRepository;
     private FestivalRepository festivalRepository;
+    private PerformanceReviewMapper performanceReviewMapper;
+    private PerformanceReviewRepository performanceReviewRepository;
 
     public Map<String,Object> performanceCreation(PerformanceDto dto){
         List<Date> rehearsalDates=new ArrayList<>();
@@ -116,7 +116,7 @@ public class PerformanceService {
                     , dto.getMerchandiseItems() != null && !dto.getMerchandiseItems().isEmpty() ? merchandiseRepository.findAllById(dto.getMerchandiseItems()) : null
                     , rehearsalDates
                     , timeSlots
-                    , PerformanceState.CREATED
+                    , dto.getPerformanceState()!= null ? PerformanceState.valueOf(dto.getPerformanceState()) : PerformanceState.CREATED
                     ,festivalRepository.findById(dto.getId()).orElseThrow()
                     ,null
             );
@@ -187,8 +187,55 @@ public class PerformanceService {
             throw new Exception(staffMember+" not staff member");
         }
     }
-    public Map<String,Object> performanceReview(String staff , PerformanceReviewDto dto,Long performance){
-        //not implemented yet
-        return null;
+    public Map<String,Object> performanceReview(String staff , PerformanceReviewDto dto,Long performance) throws Exception {
+        var performanceObj = performanceRepository.findById(performance).orElseThrow();
+        if(!performanceObj.getFestival().getFestivalState().equals(FestivalState.SCHEDULING)){
+            throw new Exception("Festival not in SCHEDULING state");
+        }
+        var user = userRepository.findById(staff).orElseThrow();
+        if(!user.getRoles().contains("STAFF") || !performanceObj.getStaff().getUsername().equals(staff)){
+            throw new Exception("wrong staff user");
+        }
+        var review = performanceReviewMapper.toEntity(dto,performanceObj);
+        performanceReviewRepository.save(review);
+        performanceObj.setReview(review);
+        performanceObj.setPerformanceState(PerformanceState.REVIEWED);
+        performanceRepository.save(performanceObj);
+        return Map.of("result","successful","dto",dto);
     }
+    public Map<String,Object> performanceRejection(Long perfomanceId, PerformanceReviewDto rejectionReasons) throws Exception {
+        var performance = performanceRepository.findById(perfomanceId).orElseThrow();
+        performance.setPerformanceState(PerformanceState.REJECTED);
+        switch (performance.getFestival().getFestivalState()){
+            case SCHEDULING, DECISION -> {
+                if (rejectionReasons == null){
+                    var review = PerformanceReview.builder()
+                            .id(null)
+                            .score(0)
+                            .comments("Failed to submit final performance details")
+                            .build();
+                    performance.setReview(review);
+                    performanceReviewRepository.save(review);
+                    performanceRepository.save(performance);
+                    return Map.of("result","performance "+performance.getName()+""+perfomanceId+" successfully rejected");
+                }
+                var review = performanceReviewMapper.toEntity(rejectionReasons,performance);
+                performance.setReview(review);
+                performanceReviewRepository.save(review);
+                performanceRepository.save(performance);
+
+                return Map.of("result","performance "+performance.getName()+""+perfomanceId+" successfully rejected");
+            }
+            default -> throw new Exception("Unsupported festival state");
+        }
+
+    }
+    public Map<String,Object> performanceFinalSubmission(Long performanceId,PerformanceDto dto) throws Exception {
+        var result = this.performanceUpdate(dto,performanceId);
+        performanceRepository.updatePerformanceStateById(PerformanceState.FINAL_SUBMISSION,performanceId);
+        result.put("result","final submission complete");
+        return result;
+    }
+
+
 }

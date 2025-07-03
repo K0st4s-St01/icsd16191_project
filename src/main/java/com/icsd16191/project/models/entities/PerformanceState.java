@@ -6,5 +6,6 @@ public enum PerformanceState {
     REVIEWED,
     REJECTED,
     APPROVED,
-    SCHEDULED
+    SCHEDULED,
+    FINAL_SUBMISSION;
 }

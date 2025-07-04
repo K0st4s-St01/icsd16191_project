@@ -1,6 +1,7 @@
 package com.icsd16191.project.repositories;
 
 import com.icsd16191.project.models.entities.Festival;
+import com.icsd16191.project.models.entities.FestivalState;
 import com.icsd16191.project.models.entities.Performance;
 import com.icsd16191.project.models.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +21,9 @@ public interface FestivalRepository extends JpaRepository<Festival,Long> {
     List<Festival> findByNameIgnoreCase(String name);
 
     List<Festival> findByNameContainsIgnoreCaseOrDescriptionContainsIgnoreCase(String name, String description);
+
+    @Transactional
+    @Modifying
+    @Query("update Festival f set f.festivalState = ?1 where f.id = ?2")
+    int updateFestivalStateById(FestivalState festivalState, Long id);
 }

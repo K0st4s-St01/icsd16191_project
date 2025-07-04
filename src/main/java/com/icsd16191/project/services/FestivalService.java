@@ -142,4 +142,135 @@ If no word is given for any of the aforementioned criteria, then all the festiva
         }
         return Map.of("result","successful","dtos",dtos);
     }
+    public Map<String,Object> festivalView(Long id){
+        var entity = festivalRepository.findById(id).orElseThrow();
+        return Map.of("result","successful","dto"
+                , festivalMapper.toDto(
+                        entity,
+                        entity.getOrganizers().stream().map(User::getUsername).collect(Collectors.toList()),
+                        entity.getStaff().stream().map(User::getUsername).collect(Collectors.toList()),
+                        entity.getDates().stream().map(FestivalDateFormatter::turnToString).collect(Collectors.toList()),
+                        entity.getPerformances().stream().map(Performance::getId).collect(Collectors.toList())
+                ));
+    }
+    public Map<String,Object> festivalDelete(Long id,String user) throws Exception {
+        var entity = festivalRepository.findById(id).orElseThrow();
+        if (entity.getOrganizers().stream().anyMatch(user1 -> {
+            return user1.getUsername().equals(user);
+        })){
+            if (entity.getFestivalState().equals(FestivalState.CREATED)) {
+                festivalRepository.deleteById(id);
+                return Map.of("result","successful");
+            }else{
+                throw new Exception("Festival not in correct state");
+            }
+        }else{
+            throw new Exception("wrong user");
+        }
+    }
+    public Map<String,Object> submissionStart(Long id,String user) throws Exception {
+        var entity = festivalRepository.findById(id).orElseThrow();
+        if (entity.getOrganizers().stream().anyMatch(user1 -> {
+            return user1.getUsername().equals(user);
+        })){
+            if (entity.getFestivalState().equals(FestivalState.CREATED)) {
+                festivalRepository.updateFestivalStateById(FestivalState.SUBMISSION,id);
+                return Map.of("result","successful");
+            }else{
+                throw new Exception("Festival not in correct state");
+            }
+        }else{
+            throw new Exception("wrong user");
+        }
+    }
+    public Map<String,Object> assignmentStart(Long id,String user) throws Exception {
+        var entity = festivalRepository.findById(id).orElseThrow();
+        if (entity.getOrganizers().stream().anyMatch(user1 -> {
+            return user1.getUsername().equals(user);
+        })){
+            if (entity.getFestivalState().equals(FestivalState.SUBMISSION)) {
+                festivalRepository.updateFestivalStateById(FestivalState.ASSIGNMENT,id);
+                return Map.of("result","successful");
+            }else{
+                throw new Exception("Festival not in correct state");
+            }
+        }else{
+            throw new Exception("wrong user");
+        }
+    }
+    public Map<String,Object> reviewStart(Long id,String user) throws Exception {
+        var entity = festivalRepository.findById(id).orElseThrow();
+        if (entity.getOrganizers().stream().anyMatch(user1 -> {
+            return user1.getUsername().equals(user);
+        })){
+            if (entity.getFestivalState().equals(FestivalState.ASSIGNMENT)) {
+                festivalRepository.updateFestivalStateById(FestivalState.REVIEW,id);
+                return Map.of("result","successful");
+            }else{
+                throw new Exception("Festival not in correct state");
+            }
+        }else{
+            throw new Exception("wrong user");
+        }
+    }
+    public Map<String,Object> schedulingState(Long id,String user) throws Exception {
+        var entity = festivalRepository.findById(id).orElseThrow();
+        if (entity.getOrganizers().stream().anyMatch(user1 -> {
+            return user1.getUsername().equals(user);
+        })){
+            if (entity.getFestivalState().equals(FestivalState.REVIEW)) {
+                festivalRepository.updateFestivalStateById(FestivalState.SCHEDULING,id);
+                return Map.of("result","successful");
+            }else{
+                throw new Exception("Festival not in correct state");
+            }
+        }else{
+            throw new Exception("wrong user");
+        }
+    }
+    public Map<String,Object> finalSubmissionState(Long id,String user) throws Exception {
+        var entity = festivalRepository.findById(id).orElseThrow();
+        if (entity.getOrganizers().stream().anyMatch(user1 -> {
+            return user1.getUsername().equals(user);
+        })){
+            if (entity.getFestivalState().equals(FestivalState.SCHEDULING)) {
+                festivalRepository.updateFestivalStateById(FestivalState.FINAL_SUBMISSION,id);
+                return Map.of("result","successful");
+            }else{
+                throw new Exception("Festival not in correct state");
+            }
+        }else{
+            throw new Exception("wrong user");
+        }
+    }
+    public Map<String,Object> decisionState(Long id,String user) throws Exception {
+        var entity = festivalRepository.findById(id).orElseThrow();
+        if (entity.getOrganizers().stream().anyMatch(user1 -> {
+            return user1.getUsername().equals(user);
+        })){
+            if (entity.getFestivalState().equals(FestivalState.FINAL_SUBMISSION)) {
+                festivalRepository.updateFestivalStateById(FestivalState.DECISION,id);
+                return Map.of("result","successful");
+            }else{
+                throw new Exception("Festival not in correct state");
+            }
+        }else{
+            throw new Exception("wrong user");
+        }
+    }
+    public Map<String,Object> announcementState(Long id,String user) throws Exception {
+        var entity = festivalRepository.findById(id).orElseThrow();
+        if (entity.getOrganizers().stream().anyMatch(user1 -> {
+            return user1.getUsername().equals(user);
+        })){
+            if (entity.getFestivalState().equals(FestivalState.DECISION)) {
+                festivalRepository.updateFestivalStateById(FestivalState.ANNOUNCED,id);
+                return Map.of("result","successful");
+            }else{
+                throw new Exception("Festival not in correct state");
+            }
+        }else{
+            throw new Exception("wrong user");
+        }
+    }
 }

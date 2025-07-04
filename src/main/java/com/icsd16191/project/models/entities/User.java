@@ -30,7 +30,7 @@ public class User  {
     @OneToOne(mappedBy = "staff")
     private Performance staffperformance;
 
-    @OneToMany(mappedBy = "organizer")
+    @ManyToMany(mappedBy = "organizers")
     private List<Festival> festivals = new ArrayList<>();
 
     @ManyToMany

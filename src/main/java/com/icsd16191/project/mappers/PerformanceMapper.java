@@ -37,7 +37,7 @@ public class PerformanceMapper {
                 .setList(dto.getSetList())
                 .performanceState(state)
                 .festival(festival)
-                .performanceReview(review)
+                .review(review)
                 .build();
     }
     public PerformanceDto toDto(

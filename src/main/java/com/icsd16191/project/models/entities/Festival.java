@@ -23,9 +23,9 @@ public class Festival {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Date> dates = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "festival_organizer")
-    private User organizer;
+    @ManyToMany
+    @JoinTable
+    private List<User> organizers;
 
     @ManyToMany(mappedBy = "staffFestivals")
     private List<User> staff = new ArrayList<>();

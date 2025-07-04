@@ -12,12 +12,12 @@ import java.util.List;
 
 @Component
 public class FestivalMapper {
-    public Festival toEntity(FestivalDto dto, FestivalState state, User organizer, List<User> staff, Date creationDate, List<Date> dates, List<Performance> performances){
+    public Festival toEntity(FestivalDto dto, FestivalState state, List<User> organizers, List<User> staff, Date creationDate, List<Date> dates, List<Performance> performances){
         return Festival
                 .builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
-                .organizer(organizer)
+                .organizers(organizers)
                 .id(dto.getId() != null ? dto.getId() : null)
                 .staff(staff)
                 .creationDate(creationDate)
@@ -26,13 +26,13 @@ public class FestivalMapper {
                 .performances(performances)
                 .build();
     }
-    public FestivalDto toDto(Festival entity,String organizer,List<String> staff,List<String> dates,List<Long> performances){
+    public FestivalDto toDto(Festival entity,List<String> organizers,List<String> staff,List<String> dates,List<Long> performances){
         return FestivalDto
                 .builder()
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .id(entity.getId())
-                .organizer(organizer)
+                .organizers(organizers)
                 .staff(staff)
                 .dates(dates)
                 .festivalState(entity.getFestivalState().toString())

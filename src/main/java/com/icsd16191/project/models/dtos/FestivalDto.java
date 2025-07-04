@@ -20,7 +20,7 @@ public class FestivalDto {
     private String description;
     private List<String> dates = new ArrayList<>();
 
-    private String organizer;
+    private List<String> organizers;
 
     private List<String> staff = new ArrayList<>();
 

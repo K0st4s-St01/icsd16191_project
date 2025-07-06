@@ -39,7 +39,7 @@ public class UserService {
             userRepository.save(entity);
             return Map.of("result","successfully added "+dto.getUsername()+" "+dto.getRoles().get(0));
         }
-        return Map.of("result","username "+dto.getUsername()+"taken");
+        return Map.of("result","username "+dto.getUsername()+" taken");
     }
     public Map<String,Object> login(UserDto dto) throws Exception {
         var auth = authProvider.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(),dto.getPassword()));

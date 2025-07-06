@@ -32,7 +32,9 @@ public class FestivalService {
         if (festivalRepository.existsByName(dto.getName())){
             throw new Exception("festival "+dto.getName()+" already exists");
         }
-        if (userRepository.findById(creator).orElseThrow().getRoles().contains("Organizer")){
+        var roles = userRepository.findById(creator).orElseThrow().getRoles();
+        System.out.println(roles);
+        if (roles.contains("ROLE_ORGANIZER")){
             throw new Exception("user not organizer");
         }
         List<Date> dates = dto.getDates() != null && !dto.getDates().isEmpty() ? dto.getDates().stream().map(date -> {

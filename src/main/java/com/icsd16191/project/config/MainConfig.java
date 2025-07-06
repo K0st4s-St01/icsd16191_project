@@ -22,8 +22,14 @@ public class MainConfig {
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.csrf(csrf -> csrf.disable());
         httpSecurity.sessionManagement(
                 s ->  s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        );
+        httpSecurity.authorizeHttpRequests(http -> {
+                    http.requestMatchers("/user/**").permitAll()
+                            .requestMatchers("/festival/**").hasAuthority("ORGANIZER");
+                }
         );
         httpSecurity.formLogin(l -> l.disable());
         httpSecurity.authenticationProvider(provider);

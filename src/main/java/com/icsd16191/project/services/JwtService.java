@@ -3,15 +3,16 @@ package com.icsd16191.project.services;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-
+@Component
 public class JwtService {
     private long EXPIRATIONTIME=8640000;
-    private String prefix = "Bearer";
+    private String prefix = "Bearer ";
     private SecretKey key = Keys.hmacShaKeyFor("IDontKnowWhyLibrariesChangeEverythingOvertime!!1998".getBytes(StandardCharsets.UTF_8));
 
     public String getToken(String username){
@@ -26,7 +27,7 @@ public class JwtService {
         String user = null;
         if (token!=null){
             user = Jwts.parser()
-                    .decryptWith(key)
+                    .verifyWith(key)
                     .build()
                     .parseSignedClaims(token.replace(prefix,""))
                     .getPayload()

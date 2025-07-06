@@ -26,8 +26,8 @@ public class FestivalAuthProvider implements AuthenticationProvider {
         if(entity.isPresent()){
             var entityObj = entity.get();
             if(BCrypt.checkpw(
-                    entityObj.getPassword().getBytes(StandardCharsets.UTF_8),
-                    authentication.getCredentials().toString()
+                    authentication.getCredentials().toString(),
+                    entityObj.getPassword()
             )){
                 var authorities = new ArrayList<JwtFilter.FestivalAuthorities>();
                 for (String role : entityObj.getRoles()){

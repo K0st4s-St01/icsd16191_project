@@ -125,12 +125,15 @@ public class PerformanceService {
         }
         throw new Exception("performance does not exist");
     }
-    public Map<String,Object> bandMemberAddition(String bandMember,Long performanceId) throws Exception {
+    public Map<String,Object> bandMemberAddition(String bandMember,Long performanceId,String artist) throws Exception {
         if(bandMember == null || performanceId == null){
             throw new Exception("bandMember or id null");
         }
         if (performanceRepository.existsById(performanceId) && userRepository.existsById(bandMember)){
             var performance = performanceRepository.findById(performanceId).orElseThrow();
+            if(performance.getBandMembers().stream().noneMatch(user -> user.getUsername().equals(artist))){
+                throw new Exception("wrong user");
+            }
             var user = userRepository.findById(bandMember).orElseThrow();
             if (!user.getRoles().contains("ARTIST")){
                 throw new Exception("user "+user.getUsername()+" is not an artist");

@@ -1,21 +1,13 @@
 package com.icsd16191.project.rest;
 
 import com.icsd16191.project.models.dtos.FestivalDto;
-import com.icsd16191.project.models.entities.FestivalState;
-import com.icsd16191.project.models.entities.Performance;
-import com.icsd16191.project.models.entities.User;
 import com.icsd16191.project.services.FestivalService;
-import com.icsd16191.project.utils.FestivalDateFormatter;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/festival")

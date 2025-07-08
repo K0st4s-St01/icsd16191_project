@@ -1,0 +1,8 @@
+{
+	"username":"Konstantinos",
+	"password":"1234",
+	"roles":["ORGANIZER"],
+	"performances":[],
+	"festivals":[],
+	"staffFestivals":[]
+}

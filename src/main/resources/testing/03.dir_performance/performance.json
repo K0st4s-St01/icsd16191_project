@@ -1,0 +1,14 @@
+{
+   "name":"name",
+   "description":"description",
+   "genre":"rockNroll",
+   "duration":36000,
+   "bandMembers":["LudwigVonVan","MickJagger"],
+   "technicalRequirements":"electric guitar and a pianno",
+   "setList":"setList\nsetList\nsetList",
+   "merchandiseItems":[],
+   "preferredRehearsalTimes" :["01.01.2026->00:30"],
+   "preferredPerformanceTimeSlots":["01.01.2026->01:00"],
+   "festival":1
+
+}

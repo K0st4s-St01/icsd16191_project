@@ -7,6 +7,7 @@ import com.icsd16191.project.models.dtos.PerformanceReviewDto;
 import com.icsd16191.project.models.entities.*;
 import com.icsd16191.project.repositories.*;
 import com.icsd16191.project.utils.FestivalDateFormatter;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class PerformanceService {
     private PerformanceMapper performanceMapper;
@@ -179,10 +181,9 @@ public class PerformanceService {
         }
     }
     public Map<String,Object> staffAssignment(String staffMember,Long performanceId) throws Exception {
-        var staffUser = userRepository.findById(staffMember).orElseThrow();
-        if(staffUser.getRoles().contains("STAFF")){
+        if (userRepository.userHasRole(staffMember,"STAFF")){
             var performance = performanceRepository.findById(performanceId).orElseThrow();
-            performance.setStaff(staffUser);
+            performance.setStaff(userRepository.findById(staffMember).orElseThrow());
             performanceRepository.save(performance);
             return Map.of("result","performance "+performance.getName()+"-"+performanceId+" successfully assigned "+staffMember+" as corresponding staff member for performance");
         }else{
@@ -195,7 +196,7 @@ public class PerformanceService {
             throw new Exception("Festival not in SCHEDULING state");
         }
         var user = userRepository.findById(staff).orElseThrow();
-        if(!user.getRoles().contains("STAFF") || !performanceObj.getStaff().getUsername().equals(staff)){
+        if(!userRepository.userHasRole(staff,"STAFF") || !performanceObj.getStaff().getUsername().equals(staff)){
             throw new Exception("wrong staff user");
         }
         var review = performanceReviewMapper.toEntity(dto,performanceObj);

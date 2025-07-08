@@ -4,6 +4,7 @@ import com.icsd16191.project.config.FestivalAuthProvider;
 import com.icsd16191.project.mappers.UserMapper;
 import com.icsd16191.project.models.dtos.UserDto;
 import com.icsd16191.project.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 @AllArgsConstructor
 @Service
+@Transactional
 public class UserService {
     private UserRepository userRepository;
     private UserMapper userMapper;

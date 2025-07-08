@@ -10,6 +10,7 @@ import com.icsd16191.project.repositories.FestivalRepository;
 import com.icsd16191.project.repositories.PerformanceRepository;
 import com.icsd16191.project.repositories.UserRepository;
 import com.icsd16191.project.utils.FestivalDateFormatter;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class FestivalService {
     private FestivalRepository festivalRepository;
     private FestivalMapper festivalMapper;
